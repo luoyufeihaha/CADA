@@ -1,27 +1,52 @@
-# Class-Aware Adversarial Unsupervised Domain Adaptation for Linguistic Steganalysis
+# Class-Aware Adversarial Unsupervised Domain Adaptation for Linguistic Steganalysis (CADA)
 
-Official implementation of the paper:
+Official implementation of:
 
-> **Class-Aware Adversarial Unsupervised Domain Adaptation for Linguistic Steganalysis**
+> **Zhen Yang, Yufei Luo, Jinshuai Yang, Xin Xu, Ru Zhang*, Yongfeng Huang**  
+> *Class-aware Adversarial Unsupervised Domain Adaptation for Linguistic Steganalysis*  
+> IEEE Transactions on Information Forensics and Security (TIFS), 2025  
+> DOI: https://doi.org/10.1109/TIFS.2025.3569409  
 
 ---
 
+## Architecture
+
+![CADA Architecture](images/The%20architecture%20of%20the%20proposed%20linguistic%20steganalysis%20method%20CADA.png)
+
+## Main Results
+
+![Comparison of Domain Adaptation Steganalysis Methods](images/Comparison%20of%20Domain%20Adaptation%20Steganalysis%20Methods.png)
+
 ## Overview
 
-This repository provides the code for **CAUDA**, a cross-domain linguistic steganalysis framework that adapts a steganalysis model trained on a labelled source domain to an unlabelled target domain without requiring any target-domain annotations.
+Cross-domain linguistic steganalysis aims to detect stego texts in an unlabeled target domain using a model trained on a labeled source domain.  
 
-The framework consists of two phases:
+Existing methods mainly reduce marginal distribution discrepancy between domains, but often suffer from:
 
-**Phase 1 – UDA Pre-training**
-- Supervised source-domain pre-training of the feature extractor *F* and steganalysis classifier *C*
-- Adversarial domain alignment via a domain discriminator *D*, optimising *L*<sub>adv</sub><sup>D</sup> (Eq. 9) and *L*<sub>adv</sub><sup>F</sup> (Eq. 10)
-- Weighted Class-Aware Domain Distance (WCADD, Eq. 12) as an auxiliary metric constraint
-- High-confidence pseudo-label selection on the target domain
+- **Class-misalignment**: incorrect alignment between cover and stego texts across domains  
+- **Class-indistinction**: insufficient class separation in the target domain  
 
-**Phase 2 – Class-Aware Pseudo-Label Fine-tuning**
-- Iterative class-balanced pseudo-label selection with confidence-based soft weighting
-- Exponential growth schedule for the pseudo-label budget
-- Fine-tuning of the target-domain model on the selected samples
+To address these issues, we propose **CADA**, a two-stage class-aware adversarial domain adaptation framework.
+
+---
+
+## Framework
+
+CADA consists of two stages:
+
+### Phase 1 – Class-aware Adversarial Pre-Training (CAPT)
+
+- Supervised source-domain training
+- Adversarial domain alignment (feature extractor vs. domain discriminator)
+- **Weighted Class-Aware Domain Distance (WCADD)**
+- Class-Aware Label Smoothing (CALS)
+
+### Phase 2 – Class-aware Fine-Tuning (CFT)
+
+- Iterative pseudo-label selection
+- Confidence-aware soft weighting
+- Class-balanced sampling
+- Progressive pseudo-label growth
 
 ---
 
@@ -62,56 +87,26 @@ pip install -r requirements.txt
 | tqdm | ≥ 4.66.1 |
 | numpy | ≥ 1.21.6 |
 
-A CUDA-capable GPU is recommended.
 
 ---
 
-## Data Preparation
+## Dataset
 
-Each domain requires four plain-text files (one sentence per line):
+We use publicly available datasets introduced in:
 
+Wen et al.,  
+**SCL-Stega: Exploring Advanced Objective in Linguistic Steganalysis using Contrastive Learning**  
+IH&MMSec 2023  
+
+```bibtex
+@inproceedings{wen2023scl,
+  title={Scl-stega: Exploring advanced objective in linguistic steganalysis using contrastive learning},
+  author={Wen, Juan and Gao, Liting and Fan, Guangying and Zhang, Ziwei and Jia, Jianghao and Xue, Yiming},
+  booktitle={Proceedings of the 2023 ACM Workshop on Information Hiding and Multimedia Security},
+  pages={97--102},
+  year={2023}
+}
 ```
-your_data/
-├── source_train_cover.txt
-├── source_train_stego.txt
-├── source_eval_cover.txt
-├── source_eval_stego.txt
-├── target_train_cover.txt
-├── target_train_stego.txt
-├── target_test_cover.txt
-└── target_test_stego.txt
-```
-
----
-
-## Training
-
-```bash
-python main.py \
-  --src-train-cover  your_data/source_train_cover.txt \
-  --src-train-stego  your_data/source_train_stego.txt \
-  --src-eval-cover   your_data/source_eval_cover.txt \
-  --src-eval-stego   your_data/source_eval_stego.txt \
-  --tgt-train-cover  your_data/target_train_cover.txt \
-  --tgt-train-stego  your_data/target_train_stego.txt \
-  --tgt-test-cover   your_data/target_test_cover.txt \
-  --tgt-test-stego   your_data/target_test_stego.txt \
-  --bert-path        bert-base-uncased \
-  --model-root       snapshots
-```
-
-### Key Arguments
-
-| Argument | Default | Description |
-|---|---|---|
-| `--bert-path` | `bert-base-uncased` | HuggingFace model name or local BERT path |
-| `--model-root` | `snapshots` | Directory for saving checkpoints |
-| `--lr` | `1e-4` | Adam learning rate |
-| `--batch-size` | `50` | Mini-batch size |
-| `--pretrain-src-epochs` | `2` | Source pre-training epochs |
-| `--pretrain-uda-epochs` | `5` | UDA adversarial pre-training epochs |
-| `--pseudo-label-budget` | `20000` | Max pseudo-labelled samples per round |
-| `--gpu` | `0` | GPU device index |
 
 ---
 
@@ -136,10 +131,23 @@ python main.py \
 If you find this work useful, please cite our paper:
 
 ```bibtex
-@article{cauda2024,
-  title   = {Class-Aware Adversarial Unsupervised Domain Adaptation for Linguistic Steganalysis},
-  author  = {},
-  journal = {},
-  year    = {2024}
+@article{yang2025class,
+  title={Class-aware adversarial unsupervised domain adaptation for linguistic steganalysis},
+  author={Yang, Zhen and Luo, Yufei and Yang, Jinshuai and Xu, Xin and Zhang, Ru and Huang, Yongfeng},
+  journal={IEEE Transactions on Information Forensics and Security},
+  year={2025},
+  publisher={IEEE}
 }
 ```
+
+## License
+
+This repository is released under the MIT License.
+
+## Contact
+
+If you have any questions about the paper, the implementation, or encounter issues when reproducing the results, please feel free to reach out:
+
+- **Yufei Luo**: luoyf@bupt.edu.cn  
+
+We warmly welcome discussions, suggestions, and potential collaborations on related topics, including linguistic steganalysis, domain adaptation, and adversarial learning.
