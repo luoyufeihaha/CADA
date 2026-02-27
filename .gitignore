@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dataset (not tracked — download separately)
+Steganalysis_data/
+Steganalysis/
+data/
+
+# Model checkpoints
+snapshots/
+*.pt
+*.pth
+*.bin
+
+# Experiment results
+result/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
