@@ -50,29 +50,6 @@ CADA consists of two stages:
 
 ---
 
-## Model Architecture
-
-```
-Input Text
-    │
-    ▼
-Frozen BERT (bert-base-uncased)
-    │  token-level hidden states
-    ▼
-BiLSTM
-    │
-    ▼
-Channel-wise Weighting Gate (sigmoid)
-    │  domain-invariant features Ω
-    ▼
-┌───────────────┬──────────────────┐
-│  Classifier C │  Discriminator D │
-│  (cover/stego)│  (source/target) │
-└───────────────┴──────────────────┘
-```
-
----
-
 ## Requirements
 
 ```bash
