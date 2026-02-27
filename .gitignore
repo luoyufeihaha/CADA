@@ -13,8 +13,8 @@ build/
 *.swp
 *.swo
 
-# Dataset (not tracked — download separately)
-Steganalysis_data/
+# Dataset directories (add here if you do not want to track them)
+# Steganalysis_data/
 Steganalysis/
 data/
 
