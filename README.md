@@ -117,6 +117,24 @@ If you find this work useful, please cite our paper:
 }
 ```
 
+## Review Timeline
+
+This paper was submitted to *IEEE Transactions on Information Forensics and Security (TIFS)*.
+
+Review history:
+
+- **Submitted:** 09 September 2024  
+- **Major Revision:** 03 February 2025  
+- **Minor Revision:** 21 April 2025  
+- **Accepted:** 06 May 2025  
+- **Published Online:** 12 May 2025  
+
+Total duration: ~8 months.
+
+The manuscript underwent one major revision and one minor revision.  
+Revisions mainly focused on strengthening theoretical justification, expanding ablation studies, and clarifying pseudo-label robustness.
+
+
 ## License
 
 This repository is released under the MIT License.
